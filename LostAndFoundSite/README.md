@@ -42,7 +42,7 @@ Access [localhost:8000/LostАndFoundSite-admin/](http://localhost:8000/LostАndF
 
 <!-- [[[cog
 import cog
-from LostАndFoundSite.config import Config
+from LostAndFoundSite.config import Config
 mdown = Config.generate_markdown()
 cog.out('\n'.join(mdown.split('\n')[1:]))
 ]]] -->
