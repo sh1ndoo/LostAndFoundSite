@@ -34,7 +34,9 @@ services:
       - ./certbot/www:/var/www/certbot
     ports:
       - "80:80"
+      - "[::]:80:80" # Добавлено для IPv6
       - "443:443"
+      - "[::]:443:443" # Добавлено для IPv6
     depends_on:
       - web
     restart: unless-stopped
