@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <title>Профиль</title>
+    <link type="text/css" href="{% static 'users/css/users.css' %}" rel="stylesheet">
+    {# Подключите Font Awesome, если он еще не подключен в base.html #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="profile-card">
+        <div class="profile-section">
+            <div class="profile-avatar-wrapper">
+                <img src="{{ user.avatar.url }}" alt="Аватар {{ user.first_name }}">
+            </div>
+            <div class="profile-info">
+                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                <p class="profile-contact">{{ user.phone_number }}</p>
+
+                <div class="social-links">
+                    {% if user.telegram %}
+                    <a href="https://t.me/{{ user.telegram }}" target="_blank" rel="noopener noreferrer" title="Telegram">
+                        <i class="fab fa-telegram-plane"></i>
+                        <span>{{ user.telegram }}</span>
+                    </a>
+                    {% endif %}
+                    {% if user.vk %}
+                    <a href="https://vk.com/{{ user.vk }}" target="_blank" rel="noopener noreferrer" title="ВКонтакте">
+                        <i class="fab fa-vk"></i>
+                        <span>{{ user.vk }}</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if user == request.user %}
+        <div class="profile-actions">
+            <a href="{% url "users:edit_profile" %}" class="btn btn-secondary">
+                <i class="fas fa-edit"></i> Редактировать
+            </a>
+            <form method="post" action="{% url "users:logout" %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary" onclick="return confirm('Вы уверены, что хотите выйти?');">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    {# Список вещей пользователя #}
+    <div class="listings-header">
+        <h1>Вещи</h1>
+    </div>
+
+    <div class="listings-grid">
+        {% for thing in user.things.all %}
+            {% include 'things/card.html' %}
+        {% empty %}
+            <p class="no-items-message">Пусто 😢</p>
+        {% endfor %}
+    </div>
+{% endblock %}

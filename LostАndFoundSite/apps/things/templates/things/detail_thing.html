@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <title>{{ thing.status }} - {{ thing.name }}</title>
+    <link type="text/css" href="{% static 'things/css/detail-page.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="item-detail-container">
+
+    <!-- Левая колонка с изображением -->
+    <div class="item-image-panel">
+        <img src="{{ thing.image.url }}" alt="{{ thing.name }}">
+    </div>
+
+    <!-- Правая колонка с информацией -->
+    <div class="item-info-panel">
+
+        <!-- Заголовок -->
+        <h1>{{ thing.name }}</h1>
+
+        {% if thing.status %}
+           <div class="detail-status status-found">
+                <i class="fas fa-exclamation-circle"></i> Найдено
+           </div>
+        {% else %}
+           <div class="detail-status status-lost">
+                <i class="fas fa-exclamation-circle"></i> Потеряно
+           </div>
+        {% endif %}
+
+        <!-- Детальные блоки -->
+        <div class="info-block">
+            <h2>Описание</h2>
+            <p>{{ thing.description }}</p>
+        </div>
+
+        <div class="info-block">
+            <h2>Место</h2>
+            <p>{{ thing.address }}</p>
+        </div>
+
+        <div class="info-block">
+            <h2>Дата потери</h2>
+            <p>{{ thing.date_lost_or_found }}</p>
+        </div>
+
+        <!-- Кнопка для связи -->
+        <div class="item-actions">
+
+            {% if thing.owner_id != request.user.id %}
+            <a href="{% url 'users:profile' thing.owner_id %}" class="btn btn-primary">
+                <i class="fas fa-comments"></i> Связаться с владельцем
+            </a>
+            {% endif %}
+
+            {# Кнопки только для владельца вещи #}
+            {% if thing.owner_id == request.user.id %}
+                <button onclick="window.location.href='{% url 'things:edit' thing.id %}'" class="btn btn-secondary">
+                    <i class="fas fa-edit"></i> Редактировать
+                </button>
+
+                <form method="post" action="{% url 'things:delete' thing.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить эту вещь?');">
+                        <i class="fas fa-trash-alt"></i> Удалить
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

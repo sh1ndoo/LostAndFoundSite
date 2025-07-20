@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бюро находок</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        {% block header %}
+        {% include 'includes/header.html' %}
+        {% endblock %}
+    </header>
+
+    <main id="main-content">
+    {% block content %}
+        {% if request.user.is_authenticated and not request.user.telegram and not request.user.vk %}
+            {% include 'includes/info_banner.html' %}
+        {% endif %}
+        <div class="listings-header">
+            <h1>Объявления</h1>
+            <div class="filters">
+                <div class="sort-dropdown-container">
+                    <select
+                            class="sort-dropdown"
+                            name="sort"
+                            hx-get="{% url 'things:search' %}"
+                            hx-trigger="change"
+                            hx-target="#things-list"
+                            hx-swap="innerHTML"
+                            hx-include="[name='q'], [name='status']"
+                    >
+                        <option value="-created_at">Сначала новые</option>
+                        <option value="created_at">Сначала старые</option>
+                    </select>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </div>
+                <div class="sort-dropdown-container status">
+                    <select
+                            class="sort-dropdown"
+                            name="status"
+                            hx-get="{% url 'things:search' %}"
+                            hx-trigger="change"
+                            hx-target="#things-list"
+                            hx-swap="innerHTML"
+                            hx-include="[name='q'], [name='sort']"
+                    >
+                        <option value="1">Находки</option>
+                        <option value="0">Пропажи</option>
+                    </select>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="listings-grid" id="things-list">
+            {% include 'things/thing_list.html' %}
+        </div>
+    {% endblock %}
+    </main>
+{% block scripts %}
+    <script src="https://unpkg.com/htmx.org@2.0.6"></script>
+
+    <script>
+        // Находим наш контейнер с навигацией
+        const statusNav = document.getElementById('status-nav');
+
+        // Если контейнер найден на странице
+        if (statusNav) {
+            // Находим все ссылки внутри него
+            const navLinks = statusNav.querySelectorAll('a');
+
+            // Вешаем обработчик клика на сам контейнер (делегирование событий)
+            statusNav.addEventListener('click', function(event) {
+                // Убеждаемся, что кликнули именно по ссылке (тег A)
+                const clickedLink = event.target.closest('a');
+                if (!clickedLink) return;
+
+                // Убираем класс 'active' у всех ссылок
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Добавляем класс 'active' той ссылке, по которой кликнули
+                clickedLink.classList.add('active');
+            });
+        }
+    </script>
+{% endblock %}
+</body>
+</html>

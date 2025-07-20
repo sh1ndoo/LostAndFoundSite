@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block head %}
+    <title>Добавление объявления</title>
+{% endblock %}
+{% block content %}
+<!-- Контейнер для формы создания объявления -->
+<div class="form-container">
+    <h1>Опубликовать объявление</h1>
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Выбор статуса: Найдено/Потеряно -->
+        <div class="form-group">
+            {{ form.status }}
+        </div>
+
+        <!-- Название предмета -->
+        <div class="form-group">
+            <label for="item_name">Название предмета</label>
+            {{ form.name }}
+        </div>
+
+        <!-- Описание предмета -->
+        <div class="form-group">
+            <label for="description">Описание</label>
+            {{ form.description }}
+        </div>
+
+        <!-- Местоположение -->
+        <div class="form-group">
+            <label for="location">Местоположение</label>
+            {{ form.address }}
+        </div>
+
+        <!-- Дата -->
+        <div class="form-group">
+            <label for="date">Дата</label>
+            {{ form.date_lost_or_found }}
+        </div>
+
+        <!-- Загрузка изображений -->
+        <div class="form-group">
+            <label for="image">Изображение</label>
+            {{ form.image }}
+            <label for="image" class="file-upload-button">
+                <i class="fas fa-upload"></i> Загрузить фото
+            </label>
+            <div class="image-preview-container">
+                <img id="image-preview" src="#" alt="Предпросмотр изображения" style="display: none;" />
+            </div>
+        </div>
+
+        <!-- Кнопка отправки формы -->
+        <button type="submit" class="submit-button">
+            Опубликовать
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('image');
+            const imagePreview = document.getElementById('image-preview');
+
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        // Устанавливаем src для тега img
+                        imagePreview.src = e.target.result;
+                        // Показываем блок с превью
+                        imagePreview.style.display = 'block';
+                    };
+
+                    // Читаем файл как Data URL
+                    reader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    // Если файл не выбран, сбрасываем src и скрываем превью
+                    imagePreview.src = '#';
+                    imagePreview.style.display = 'none';
+                }
+            });
+        });
+    </script>
+{% endblock %}

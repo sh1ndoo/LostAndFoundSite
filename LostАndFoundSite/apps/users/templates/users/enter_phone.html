@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <title>Вход</title>
+    <link type="text/css" href="{% static 'users/css/users.css' %}" rel="stylesheet">
+{% endblock %}
+    <!-- Основное содержимое страницы -->
+{% block content %}
+        <div class="form-container">
+            <h1>Вход</h1>
+            <p style="margin-bottom: 20px; color: #666;">Пожалуйста, введите ваш номер телефона, чтобы получить код подтверждения по SMS.</p>
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="phone">Номер телефона</label>
+                    {{ form.phone_number }}
+                </div>
+                {% for message in messages %}
+                    <div class="info-banner" style="justify-content: center; width: fit-content; margin-inline: auto">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <button type="submit"
+                        class="submit-button">
+                    Получить код
+                </button>
+            </form>
+              <div class="separator">
+                <hr class="line">
+                <span>Или</span>
+                <hr class="line">
+              </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="{% url 'social:begin' 'github' %}" class="github-login-button">
+                    <i class="fa-brands fa-github" style="font-size: 32px"></i>
+                </a>
+            </div>
+        </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phoneInput = document.getElementById('phone');
+            const initialPrefix = '+7 '; // Префикс, который всегда должен быть
+            const maxDigits = 10; // Максимальное количество цифр после '7' (3+3+2+2)
+
+            // Функция форматирования номера телефона
+            function formatPhoneNumber(value) {
+                // Удаляем все не-цифры
+                let digits = value.replace(/\D/g, '');
+
+                // Убедимся, что номер начинается с 7. Если нет, то добавляем ее,
+                // предполагая, что пользователь набирает российский номер.
+                // Также если пользователь набирает 8, меняем на 7.
+                if (digits.startsWith('8')) {
+                    digits = '7' + digits.substring(1);
+                } else if (!digits.startsWith('7') && digits.length > 0) {
+                    digits = '7' + digits;
+                }
+
+                // Ограничиваем общее количество цифр после '7' до maxDigits
+                // (т.е. всего 11 цифр, включая '7')
+                if (digits.length > (maxDigits + 1)) {
+                    digits = digits.substring(0, maxDigits + 1);
+                }
+
+                // Удаляем первую цифру '7' для форматирования остальной части
+                let numberPart = digits.startsWith('7') ? digits.substring(1) : digits;
+
+                let formatted = '';
+                if (numberPart.length > 0) {
+                    formatted += '(' + numberPart.substring(0, 3);
+                }
+                if (numberPart.length > 3) {
+                    formatted += ') ' + numberPart.substring(3, 6);
+                }
+                if (numberPart.length > 6) {
+                    formatted += '-' + numberPart.substring(6, 8);
+                }
+                if (numberPart.length > 8) {
+                    formatted += '-' + numberPart.substring(8, 10);
+                }
+
+                return initialPrefix + formatted;
+            }
+
+            // Установка начального значения и курсора при загрузке страницы
+            function setInitialValueAndCursor() {
+                if (!phoneInput.value.startsWith(initialPrefix)) {
+                    phoneInput.value = initialPrefix;
+                }
+                // Устанавливаем курсор после префикса
+                phoneInput.setSelectionRange(initialPrefix.length, initialPrefix.length);
+            }
+
+            setInitialValueAndCursor();
+
+            // Обработчик события focus: убеждаемся, что курсор не заходит за префикс
+            phoneInput.addEventListener('focus', () => {
+                if (phoneInput.selectionStart < initialPrefix.length) {
+                    phoneInput.setSelectionRange(initialPrefix.length, initialPrefix.length);
+                }
+            });
+
+            // Обработчик события keydown: предотвращает удаление префикса
+            phoneInput.addEventListener('keydown', (e) => {
+                const currentCursorPos = e.target.selectionStart;
+                // Если Backspace или Delete и курсор находится в или до префикса
+                if ((e.key === 'Backspace' || e.key === 'Delete') && currentCursorPos <= initialPrefix.length) {
+                    e.preventDefault();
+                }
+            });
+
+            // Обработчик события input: форматирование номера и управление курсором
+            phoneInput.addEventListener('input', (e) => {
+                const input = e.target;
+                const oldVal = input.value;
+                const oldCursorAbsolutePos = input.selectionStart;
+
+                // Извлекаем только цифры после префикса из старого значения
+                const oldDigitsAfterPrefix = oldVal.substring(initialPrefix.length).replace(/\D/g, '');
+
+                // Определяем количество цифр, которые были до старой позиции курсора (относительно префикса)
+                const oldCursorRelativeDigitPos = oldVal.substring(initialPrefix.length, oldCursorAbsolutePos).replace(/\D/g, '').length;
+
+                // Форматируем новое значение
+                const newVal = formatPhoneNumber(oldVal);
+                input.value = newVal;
+
+                // Вычисляем новую позицию курсора:
+                // Начинаем с длины префикса
+                let newCursorAbsolutePos = initialPrefix.length;
+                let digitsCounted = 0; // Счетчик цифр в отформатированной части
+
+                // Итерируемся по отформатированной части, чтобы найти эквивалентную позицию курсора
+                // (где находится N-я цифра из oldCursorRelativeDigitPos)
+                const formattedPart = newVal.substring(initialPrefix.length);
+                for (let i = 0; i < formattedPart.length; i++) {
+                    if (/\d/.test(formattedPart[i])) { // Если символ - это цифра
+                        digitsCounted++;
+                    }
+                    if (digitsCounted === oldCursorRelativeDigitPos) {
+                        newCursorAbsolutePos += i + 1; // Позиция после этой цифры
+                        break;
+                    }
+                    newCursorAbsolutePos += 1; // Продвигаем курсор
+                }
+
+                // Если новая позиция курсора оказалась за пределами новой строки (например, при сильном удалении)
+                // или курсор был изначально в конце, устанавливаем его в конец
+                if (newCursorAbsolutePos > newVal.length || oldCursorAbsolutePos === oldVal.length) {
+                     newCursorAbsolutePos = newVal.length;
+                }
+
+                input.setSelectionRange(newCursorAbsolutePos, newCursorAbsolutePos);
+            });
+
+            const otpInputs = document.querySelectorAll('.otp-input-group input[type="number"]');
+
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.length === e.target.maxLength) {
+                        const nextInput = otpInputs[index + 1];
+                        if (nextInput) {
+                            nextInput.focus();
+                        }
+                    }
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && e.target.value.length === 0) {
+                        const prevInput = otpInputs[index - 1];
+                        if (prevInput) {
+                            prevInput.focus();
+                        }
+                    }
+                });
+            });
+
+            // Фокусировка на первом поле OTP при загрузке секции (если она видима)
+            const otpSection = document.getElementById('otp-input-section');
+            if (otpSection && otpSection.style.display !== 'none') {
+                 otpInputs[0].focus();
+            }
+        });
+    </script>
+{% endblock %}

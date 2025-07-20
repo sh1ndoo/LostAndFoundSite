@@ -1,0 +1,44 @@
+{% load static %}
+<div class="header-left">
+    <div class="logo">
+        <a href = "{% url 'things:index' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Лого">
+        </a>
+    </div>
+    <nav id="status-nav" {% if request.path != '/' %} style="visibility: hidden" {% endif %}>
+        <a href="#"
+           hx-get="{% url 'things:search' %}?status=1"
+           hx-target="#things-list"
+           hx-swap="innerHTML"
+           hx-include="[name='q'], [name='sort']">
+            Находки
+        </a>
+        <a href="#"
+           hx-get="{% url 'things:search' %}?status=0"
+           hx-target="#things-list"
+           hx-swap="innerHTML"
+           hx-include="[name='q'], [name='sort']">
+            Пропажи
+        </a>
+    </nav>
+</div>
+<div class="search-bar" {% if request.path != '/' %} style="visibility: hidden" {% endif %}>
+    <i class="fas fa-search"></i>
+    <input
+        type="text"
+        name="q"  {# Это важно! Имя поля, которое уйдет на сервер #}
+        placeholder="Быстрый поиск по названию или описанию"
+        hx-get="{% url 'things:search' %}"      {# 1. URL, куда отправлять запрос #}
+        hx-trigger="keyup changed delay:500ms" {# 2. Триггер: при отпускании клавиши, если значение изменилось, с задержкой в полсекунды #}
+        hx-target="#things-list"               {# 3. Цель: куда вставить полученный от сервера HTML #}
+        hx-swap="innerHTML"                    {# 4. Как вставить: заменить всё содержимое цели #}
+        hx-indicator=".htmx-indicator"         {# 5. (Бонус) Показывать индикатор во время запроса #}
+        hx-include="[name='status'], [name='sort']"
+    >
+</div>
+<div class="header-right">
+    <button onclick="window.location.href = '{% url "things:create" %}'" class="icon-button add-button">
+        <i class="fas fa-plus"></i>
+    </button>
+    <button onclick="window.location.href = '{% if request.user.id %}{% url "users:profile" request.user.id %}{% else %}{% url "users:login" %}{% endif %}'" class="icon-button profile-button"><i class="fas fa-user"></i></button>
+</div>

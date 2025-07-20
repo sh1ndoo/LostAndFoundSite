@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <title>Редактирование: {{ thing.name }}</title>
+    <link type="text/css" href="{% static 'things/css/detail-page.css' %}" rel="stylesheet">
+    {# Подключаем Font Awesome для иконок #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="item-detail-container">
+
+        <!-- Левая колонка с редактируемым изображением -->
+        <div class="item-image-panel">
+            <label for="{{ form.image.id_for_label }}" class="item-image-edit">
+                <img src="{{ thing.image.url }}" alt="{{ thing.name }}" id="image-preview">
+                <div class="image-edit-overlay">
+                    <i class="fas fa-camera"></i>
+                    <span>Изменить фото</span>
+                </div>
+            </label>
+            <div style="display: none;">
+                {{ form.image }}
+            </div>
+        </div>
+
+        <!-- Правая колонка с формой -->
+        <div class="item-info-panel">
+
+            <!-- Поле для названия -->
+            <div class="editable-field-wrapper">
+                {{ form.name }}
+            </div>
+
+            <!-- Переключатель статуса -->
+            <div class="detail-status-edit">
+                {{ form.status }}
+            </div>
+
+            <!-- Редактируемые детальные блоки -->
+            <div class="info-block">
+                <h2>Описание</h2>
+                {{ form.description }}
+            </div>
+
+            <div class="info-block">
+                <h2>Место</h2>
+                {{ form.address }}
+            </div>
+
+            <div class="info-block">
+                <h2>Дата</h2>
+                {{ form.date_lost_or_found }}
+            </div>
+
+            <!-- Кнопки Сохранить / Отмена -->
+            <div class="contact-button-container edit-actions">
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-save"></i> Сохранить
+                </button>
+                <a href="{% url 'things:detail' thing.pk %}" class="edit-button">
+                    <i class="fas fa-times"></i> Отмена
+                </a>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+{# --- JavaScript для предпросмотра изображения --- #}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+        const imagePreview = document.getElementById('image-preview');
+
+        if (imageInput && imagePreview) {
+            imageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

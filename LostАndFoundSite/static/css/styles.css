@@ -1,0 +1,833 @@
+/* --- styles.css --- */
+/* --- variables.css --- */
+:root {
+    /* === Цветовая палитра === */
+    --color-primary: #ff8200;           /* Основной оранжевый */
+    --color-primary-dark: #e66a22;      /* Темно-оранжевый (для hover) */
+    --color-primary-darker: #D35400;    /* Самый темный оранжевый (для active) */
+    --color-primary-light: #FFF3E0;     /* Очень светлый оранжевый (для hover фона) */
+    --color-primary-ultralight: #ffe0b3;/* Ультра-светлый оранжевый */
+
+    --color-dark: #333;                 /* Основной темный (текст, кнопки) */
+    --color-dark-lighten: #555;         /* Светло-темный (иконки, доп. текст) */
+    --color-grey-text: #777;            /* Серый текст */
+    --color-grey-text-light: #888;      /* Светло-серый текст */
+    --color-grey-text-ultralight: #aaa; /* Ультра-светлый серый текст */
+
+    --color-light-bg: #f7faf9;          /* Фон страницы (теплый) */
+    --color-light-bg-alt: #ebebeb;      /* Альтернативный светлый фон (поиск) */
+    --color-light-bg-hover: #f0f0f0;    /* Светлый фон для hover */
+    --color-light-bg-hover-alt: #e0e0e0;/* Альтернативный светлый фон для hover */
+
+    --color-white: #fff;                /* Белый */
+    --color-border: #e0e0e0;            /* Основной цвет рамки */
+    --color-border-light: #eee;         /* Светлый цвет рамки */
+    --color-border-alt: #ccc;           /* Альтернативный цвет рамки */
+    --color-border-alt-dark: #ddd;      /* Темно-альтернативный цвет рамки */
+
+    --color-status-found-bg: #d4edda;   /* Фон для статуса "Найдено" */
+    --color-status-found-text: #155724; /* Текст для статуса "Найдено" */
+    --color-status-lost-bg: #f8d7da;    /* Фон для статуса "Потеряно" */
+    --color-status-lost-text: #721c24;  /* Текст для статуса "Потеряно" */
+
+    --color-status-found-bright: #2ecc71; /* Яркий зеленый */
+    --color-status-lost-bright: #e74c3c;  /* Яркий красный */
+    --color-status-lost-bright-dark: #c0392b; /* Темно-красный */
+
+    --color-shadow: rgba(0,0,0,0.08);    /* Цвет тени */
+    --color-shadow-light: rgba(0,0,0,0.05); /* Светлая тень */
+    --color-focus-ring: rgba(255, 165, 0, 0.2); /* Цвет кольца фокуса */
+
+    /* === Типографика === */
+    --font-family-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-size-base: 16px;
+    --font-size-sm: 14px;
+    --font-size-xs: 12px;
+    --line-height-base: 1.6;
+
+    /* === Отступы и размеры === */
+    --spacing-xl: 40px;
+    --spacing-l: 30px;
+    --spacing-base: 20px;
+    --spacing-md: 15px;
+    --spacing-sm: 10px;
+    --spacing-xs: 5px;
+
+    --header-padding: 15px 40px;
+    --main-padding: 0 40px 30px;
+    --container-margin: 20px 0px 20px;
+    --container-padding: 40px;
+
+    /* === Радиусы скругления === */
+    --border-radius-lg: 8px;
+    --border-radius-md: 5px;
+    --border-radius-sm: 3px;
+    --border-radius-xl: 15px;
+    --border-radius-pill: 20px;
+    --border-radius-circle: 50%;
+
+    /* === Переходы === */
+    --transition-base: all 0.2s ease-in-out;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-main), serif;
+    background-color: var(--color-light-bg);
+    color: var(--color-dark);
+    line-height: var(--line-height-base);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    line-height: normal;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Header Styles */
+header {
+    padding: var(--header-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 32px;
+    width: 32px;
+    margin-right: var(--spacing-xl);
+}
+nav a {
+    margin-right: var(--spacing-base);
+    font-size: 15px;
+    color: var(--color-grey-text-ultralight);
+    padding-bottom: var(--spacing-xs);
+    font-weight: 500;
+}
+
+nav a.active {
+    color: var(--color-primary-darker);
+    font-weight: 600;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-xl);
+    padding: 10px 15px;
+    min-width: 300px;
+    flex-grow: 1;
+    margin: 0 var(--spacing-base);
+}
+
+.search-bar i {
+    color: var(--color-grey-text-light);
+    margin-right: var(--spacing-sm);
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex-grow: 1;
+    font-size: var(--font-size-sm);
+}
+
+.search-bar .search-shortcut {
+    color: var(--color-grey-text-ultralight);
+    border: 1px solid var(--color-border-alt);
+    padding: 1px 6px;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    margin-left: 8px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.icon-button {
+    font-size: 18px;
+    color: var(--color-dark-lighten);
+    margin-left: 18px;
+    padding: var(--spacing-xs);
+}
+.icon-button:hover {
+    color: var(--color-primary-darker);
+}
+
+.add-button {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    border-radius: var(--border-radius-circle);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-base);
+}
+.add-button:hover {
+    background-color: var(--color-dark-lighten);
+    color: var(--color-white);
+}
+
+.profile-button {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius-circle);
+    background-color: var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-base);
+    color: var(--color-grey-text);
+}
+.profile-button:hover {
+    background-color: #d0d0d0;
+}
+
+
+/* Info Banner - ORANGE THEME */
+.info-banner {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 15px 30px;
+    margin: var(--container-margin);
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    align-items: center;
+}
+
+.info-banner i {
+    font-size: 24px;
+    margin-right: var(--spacing-md);
+}
+
+.info-banner p {
+    flex-grow: 1;
+    margin: 0;
+    font-size: var(--font-size-sm);
+}
+
+.info-banner p a {
+    text-decoration: underline;
+    font-weight: 600;
+    color: var(--color-white);
+}
+.info-banner p a:hover {
+    text-decoration: none;
+    color: var(--color-primary-ultralight);
+}
+
+.settings-button {
+    background-color: var(--color-white);
+    color: var(--color-primary-dark);
+    padding: 8px 18px;
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    margin-left: var(--spacing-base);
+    white-space: nowrap;
+}
+.settings-button:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-darker);
+}
+
+/* Main Content */
+main {
+    padding: var(--main-padding);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid transparent;
+    transition: var(--transition-base);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    color: var(--color-white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.btn-secondary {
+    background-color: var(--color-light-bg-hover);
+    color: var(--color-dark-lighten);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-light-bg-hover-alt);
+    color: var(--color-dark);
+}
+
+.listings-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    margin-top: 25px
+}
+
+.listings-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+}
+.time-ago {
+    /* Стилизуем текст времени */
+    font-size: 13px;
+    color: #95a5a6; /* Светло-серый */
+}
+.sort-dropdown-container {
+    position: relative;
+    margin-right: var(--spacing-md);
+    margin-left: var(--spacing-base);
+}
+
+.status {
+    visibility: hidden;
+}
+
+.sort-dropdown {
+    padding: 8px 30px 8px 12px;
+    border: 0px;
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-light-bg-alt);
+    font-size: var(--font-size-sm);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+.sort-dropdown:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-grey-text);
+    pointer-events: none;
+}
+
+
+.campus-filter {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    padding: 8px 15px;
+    border-radius: var(--border-radius-pill);
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+}
+.campus-filter:hover {
+    background-color: var(--color-dark-lighten);
+}
+
+.campus-count {
+    background-color: var(--color-dark-lighten);
+    border-radius: var(--border-radius-circle);
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    margin: 0 var(--spacing-xs);
+}
+
+.campus-filter i.fa-chevron-down {
+    margin-left: 8px;
+    font-size: var(--font-size-xs);
+}
+
+/* Listings Grid */
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--spacing-base);
+}
+
+
+
+.card-image {
+    height: 200px;
+    background-color: #f7f7f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-image.placeholder i.fa-camera {
+    font-size: 50px;
+    color: #bdc3c7;
+}
+
+.card-content {
+    padding: var(--spacing-md);
+}
+
+.card-content h3 {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 1.2em;
+}
+
+.location {
+    font-size: 13px;
+    color: var(--color-grey-text);
+    margin-bottom: 12px;
+}
+
+.status-time {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-xs);
+}
+
+.status-tag {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+    margin-right: var(--spacing-sm);
+    font-size: 11px;
+}
+
+.status-tag.found {
+    background-color: var(--color-status-found-bg);
+    color: var(--color-status-found-text);
+}
+
+.status-tag.lost {
+    background-color: var(--color-status-lost-bg);
+    color: var(--color-status-lost-text);
+}
+
+.time-ago {
+    color: var(--color-grey-text-light);
+}
+
+/* --- FORM STYLES ADDED HERE --- */
+.form-container {
+    background-color: var(--color-white);
+    padding: var(--container-padding);
+    margin: var(--container-margin);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 2px 8px var(--color-shadow-light);
+}
+
+.form-container h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: var(--color-dark);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-base);
+}
+
+.form-group label {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-dark-lighten);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--color-border-alt);
+    border-radius: var(--border-radius-md);
+    font-size: 15px;
+    color: var(--color-dark);
+    background-color: #fcfcfc;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.file-upload-button {
+    display: inline-block;
+    background-color: var(--color-light-bg-hover);
+    color: var(--color-dark-lighten);
+    padding: 10px 20px;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--color-border-alt-dark);
+    margin-top: var(--spacing-xs);
+}
+.file-upload-button:hover {
+    background-color: var(--color-light-bg-hover-alt);
+}
+
+.status-toggle {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: 25px;
+}
+
+.status-toggle label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: normal;
+    margin-bottom: 0;
+    color: var(--color-dark);
+}
+
+.status-toggle input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border-alt);
+    border-radius: var(--border-radius-circle);
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.status-toggle input[type="radio"]:checked {
+    border-color: var(--color-primary);
+}
+
+.status-toggle input[type="radio"]:checked::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius-circle);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+}
+
+.submit-button {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 12px 25px;
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    width: auto;
+    display: inline-block;
+}
+.submit-button:hover {
+    background-color: var(--color-primary-dark);
+}
+/* --- END FORM STYLES --- */
+.card-content {
+    /* Увеличиваем внутренние отступы для "воздуха" */
+    padding: 20px 10px;
+}
+
+.location {
+    font-size: 13px;
+    color: var(--color-dark-lighten);
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* Tablet and Mobile adjustments */
+@media (max-width: 992px) {
+    header {
+        padding: 10px 25px;
+    }
+    .search-bar {
+        min-width: 10%;
+    }
+    .search-bar input {
+        min-width: 10%;
+    }
+    .info-banner, main .form-container {
+        padding: var(--spacing-md);
+    }
+     .listings-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .filters {
+        justify-content: space-between;
+    }
+    .sort-dropdown-container {
+        width: 100%;
+        margin-bottom: var(--spacing-sm);
+        margin-left: 0;
+    }
+    main {
+        padding: 0 25px 30px;
+    }
+    .listings-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+}
+
+@media (max-width: 768px) {
+    .search-bar {
+        flex-grow: 1;
+        margin: 0 var(--spacing-sm);
+    }
+    .listings-grid {
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    }
+    .header-left nav { display: none; }
+    .card-content h3 {
+        font-size: 15px;
+    }
+    .info-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .info-banner p {
+        margin-bottom: var(--spacing-sm);
+    }
+    .settings-button {
+        margin-left: 0;
+        width: 100%;
+        max-width: 200px;
+        margin-top: var(--spacing-sm);
+    }
+    .form-container {
+        padding: var(--spacing-base);
+    }
+    .form-container h1 {
+        font-size: 24px;
+        margin-bottom: var(--spacing-base);
+    }
+    .logo {
+        margin-right: var(--spacing-sm);
+    }
+    .listings-header h1 {
+        margin-bottom: var(--spacing-xs);
+    }
+    .time-ago {
+        font-size: 12px;
+    }
+    .status {
+        visibility: visible;
+    }
+}
+
+@media (max-width: 520px) {
+    .filters {
+        align-items: stretch;
+    }
+    .campus-filter {
+        width: 100%;
+        justify-content: center;
+    }
+    .submit-button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .header-left {
+        justify-content: space-between;
+    }
+    .logo { margin-right: 0;}
+    .search-bar {
+        width: 100%;
+        min-width: 0;
+    }
+    .header-right {
+        justify-content: flex-end;
+    }
+    .icon-button { margin-left: var(--spacing-md);}
+    .listings-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    .card-content {
+        padding: 10px 5px
+    }
+    .location {
+        margin-bottom: var(--spacing-sm);
+    }
+
+}
+
+.image-preview-container {
+    margin-top: var(--spacing-md);
+}
+
+#image-preview {
+}
+
+/* === НОВЫЕ СТИЛИ ДЛЯ КАРТОЧКИ ТОВАРА === */
+
+/*
+  Эти стили можно вставить в ваш основной файл `styles.css`,
+  заменив существующие определения для .listing-card, .card-image, и т.д.
+*/
+
+.listing-card {
+    /* Более выраженные скругленные углы */
+    border-radius: 16px;
+    /* Убираем рамку для более чистого вида */
+    border: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* Плавный переход для hover-эффекта */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Эффект при наведении: карточка слегка приподнимается */
+.listing-card:hover {
+    transform: translateY(-5px);
+}
+
+.listing-card a {
+    /* Убираем стандартное подчеркивание у ссылок */
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-image {
+    height: auto;
+    overflow: hidden;
+    border-radius: var(--border-radius-xl);
+    aspect-ratio: 1/1;
+    /*border: 0.5px solid var(--color-border-light);*/
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Гарантирует, что изображение полностью покроет область */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Легкий эффект приближения изображения при наведении на карточку */
+.listing-card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+.card-content h3 {
+    /* Увеличиваем шрифт заголовка и делаем его темнее */
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50; /* Темно-сине-серый */
+    margin-bottom: 8px; /* Уменьшаем отступ снизу */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-time {
+    display: flex;
+    align-items: center;
+}
+
+.status-tag {
+    /* Делаем тег более аккуратным */
+    padding: 5px 12px;
+    border-radius: var(--border-radius-pill); /* Идеально круглая форма */
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Цвета для тега "Найдено" - уже были хорошие, оставляем */
+.status-tag.found {
+    background-color: var(--color-status-found-bg);
+    color: var(--color-status-found-text);
+}
+
+/* Цвета для тега "Потеряно" */
+.status-tag.lost {
+    background-color: var(--color-status-lost-bg);
+    color: var(--color-status-lost-text);
+}
+

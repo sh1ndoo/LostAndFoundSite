@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <title>Вход</title>
+    <link type="text/css" href="{% static 'users/css/users.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <form action="." method="POST" id="otp-form"> {# Добавлен id="otp-form" для удобства JavaScript #}
+            {% csrf_token %}
+            <div id="otp-input-section" style="display: block;">
+                <h2>Введите код</h2>
+                <p style="margin-bottom: 20px; color: #666;">Код был отправлен на номер телефона в Telegram. Пожалуйста, введите его ниже.</p>
+                <div class="form-group">
+                    <label for="otp-input-1" class="sr-only">Поля для ввода OTP кода</label>
+                    <div class="otp-input-group">
+                        <input type="number" id="otp-input-1" class="otp-digit-input" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="one-time-code" required>
+                        <input type="number" id="otp-input-2" class="otp-digit-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                        <input type="number" id="otp-input-3" class="otp-digit-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                        <input type="number" id="otp-input-4" class="otp-digit-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                        <input type="number" id="otp-input-5" class="otp-digit-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                        <input type="number" id="otp-input-6" class="otp-digit-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                    </div>
+                </div>
+                <input type="hidden" id="otp-combined-input" name="otp_code">
+                {% for message in messages %}
+                    <div class="info-banner" style="justify-content: center; width: fit-content; margin-inline: auto">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="submit-button">Подтвердить код</button>
+                <div class="otp-resend-link">
+                    Не пришел код?
+                    <a href="{% url 'users:resend_otp' %}"
+                    >
+                        Отправить повторно
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const otpForm = document.getElementById('otp-form'); // Получаем форму по id
+            const otpInputs = document.querySelectorAll('.otp-digit-input'); // Используем новый класс
+            const otpCombinedInput = document.getElementById('otp-combined-input'); // Получаем скрытое поле
+
+            // Логика автоматического перехода между полями OTP и фокуса
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    // Если введен символ и поле заполнено (длина = maxlength)
+                    if (e.target.value.length === e.target.maxLength) {
+                        const nextInput = otpInputs[index + 1];
+                        if (nextInput) {
+                            nextInput.focus(); // Переводим фокус на следующее поле
+                        }
+                    }
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    // Если нажата Backspace и текущее поле пустое
+                    if (e.key === 'Backspace' && e.target.value.length === 0) {
+                        const prevInput = otpInputs[index - 1];
+                        if (prevInput) {
+                            prevInput.focus(); // Переводим фокус на предыдущее поле
+                        }
+                    }
+                });
+            });
+
+            // Фокусировка на первом поле OTP при загрузке (если секция видима)
+            const otpSection = document.getElementById('otp-input-section');
+            if (otpSection && otpSection.style.display !== 'none' && otpInputs.length > 0) {
+                 otpInputs[0].focus();
+            }
+
+            // Обработчик отправки формы
+            otpForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Остановить стандартную отправку формы
+
+                let combinedCode = '';
+                otpInputs.forEach(input => {
+                    combinedCode += input.value; // Собираем значения из всех полей
+                });
+
+                // Устанавливаем собранный код в скрытое поле
+                otpCombinedInput.value = combinedCode;
+
+                // Теперь отправляем форму программно
+                otpForm.submit();
+            });
+        });
+
+    </script>
+{% endblock %}
