@@ -30,20 +30,23 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/app/staticfiles
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - web
     restart: unless-stopped
 
-#  certbot:
-#    image: certbot/certbot
-#    volumes:
-#      - ./certbot/conf:/etc/letsencrypt # для хранения сертификатов
-#      - ./certbot/www:/var/www/certbot   # для webroot-проверки
-#    command: certonly --webroot --webroot-path=/var/www/certbot/ --email trofim-dima06@mail.ru --agree-tos --no-eff-email -d things.ifknow.ru
-#    depends_on:
-#      - nginx
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt # для хранения сертификатов
+      - ./certbot/www:/var/www/certbot   # для webroot-проверки
+    command: certonly --webroot --webroot-path=/var/www/certbot/ --email trofim-dima06@mail.ru --agree-tos --no-eff-email -d things.ifknow.ru
+    depends_on:
+      - nginx
 
 volumes:
   postgres_data:
