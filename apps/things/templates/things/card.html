@@ -1,0 +1,21 @@
+{% load time_tags %}
+<div class="listing-card">
+    <a href="{% url 'things:detail' thing.pk %}">
+    <div class="card-image">
+        <img src="{{ thing.image.url }}" alt="{{ thing.name }}"
+             style="background-color:#e0e0e0;">
+    </div>
+    </a>
+    <div class="card-content">
+        <h3>{{ thing.name }}</h3>
+        <p class="location">{{ thing.address }}</p>
+        <div class="status-time">
+            {% if thing.status %}
+                <span class="status-tag found">Найдено</span>
+            {% else %}
+                <span class="status-tag lost">Потеряно</span>
+            {% endif %}
+            <span class="time-ago">{% time_from_now %}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <title>Редактирование профиля</title>
+    <link type="text/css" href="{% static 'users/css/users.css' %}" rel="stylesheet">
+    {# Подключите Font Awesome, если он еще не подключен в base.html #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="profile-card">
+            <div class="profile-section">
+
+                {# --- Редактируемый аватар --- #}
+                <div class="profile-avatar-wrapper">
+                    {# Оборачиваем изображение в label, чтобы по клику открывался выбор файла #}
+                    <label for="{{ form.avatar.id_for_label }}" class="profile-avatar-edit">
+                        <img src="{{ user.avatar.url }}" alt="Аватар {{ user.first_name }}" id="avatar-preview">
+                        <div class="avatar-edit-overlay">
+                            <i class="fas fa-camera"></i>
+                            <span>Изменить</span>
+                        </div>
+                    </label>
+                    {# Прячем стандартное поле для выбора файла #}
+                    <div style="display: none;">
+                        {{ form.avatar }}
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    {# --- Поля для имени и фамилии --- #}
+                    <div class="profile-name-inputs">
+                        <div class="form-group-inline">{{ form.first_name }}</div>
+                        <div class="form-group-inline">{{ form.last_name }}</div>
+                    </div>
+
+                    {# --- Статичный номер телефона --- #}
+                    <p class="profile-contact">{{ user.phone_number }}</p>
+
+                    {# --- Поля для соцсетей --- #}
+                    <div class="social-links-edit">
+                        <div class="social-input-group">
+                            <i class="fab fa-telegram-plane"></i>
+                            <span class="input-group-prefix">https://t.me/</span>
+                            {{ form.telegram }}
+                        </div>
+                        <div class="social-input-group">
+                            <i class="fab fa-vk"></i>
+                            <span class="input-group-prefix">https://vk.com/</span>
+                            {{ form.vk }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# --- Кнопки действий --- #}
+            <div class="profile-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Сохранить изменения
+                </button>
+                <a href="{% url 'users:profile' user.pk %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Отмена
+                </a>
+            </div>
+        </div>
+    </form>
+
+    {# --- JavaScript для предпросмотра изображения --- #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const avatarInput = document.getElementById('{{ form.avatar.id_for_label }}');
+            const avatarPreview = document.getElementById('avatar-preview');
+
+            if (avatarInput && avatarPreview) {
+                avatarInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            avatarPreview.src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

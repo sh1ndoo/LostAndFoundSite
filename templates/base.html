@@ -1,0 +1,114 @@
+{% load static %}
+{% load analytical %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% analytical_head_top %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бюро находок</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="{% static 'favicons/favicon.ico'%}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="48x48" href="{% static 'favicons/favicon-48x48.png' %}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'favicons/favicon-64x64.png' %}">
+    <link rel="icon" type="image/png" sizes="128x128" href="{% static 'favicons/favicon-128x128.png' %}">
+    <link rel="icon" type="image/png" sizes="256x256" href="{% static 'favicons/favicon-256x256.png' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicons/favicon.svg' %}">
+    <link rel="apple-touch-icon" sizes="192x192" href="{% static 'favicons/android-chrome-192x192.png' %}">
+    <link rel="manifest" href="{% static 'favicons/site.webmanifest' %}">
+
+    {% block head %}
+    {% endblock %}
+    {% analytical_head_bottom %}
+</head>
+<body>
+    {% analytical_body_top %}
+    <header>
+        {% block header %}
+        {% include 'includes/header.html' %}
+        {% endblock %}
+    </header>
+
+    <main id="main-content">
+    {% block content %}
+        {% if request.user.is_authenticated and not request.user.telegram and not request.user.vk %}
+            {% include 'includes/info_banner.html' %}
+        {% endif %}
+        <div class="listings-header">
+            <h1>Объявления</h1>
+            <div class="filters">
+                <div class="sort-dropdown-container">
+                    <select
+                            class="sort-dropdown"
+                            name="sort"
+                            hx-get="{% url 'things:search' %}"
+                            hx-trigger="change"
+                            hx-target="#things-list"
+                            hx-swap="innerHTML"
+                            hx-include="[name='q'], [name='status']"
+                    >
+                        <option value="-created_at">Сначала новые</option>
+                        <option value="created_at">Сначала старые</option>
+                    </select>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </div>
+                <div class="sort-dropdown-container status">
+                    <select
+                            class="sort-dropdown"
+                            name="status"
+                            hx-get="{% url 'things:search' %}"
+                            hx-trigger="change"
+                            hx-target="#things-list"
+                            hx-swap="innerHTML"
+                            hx-include="[name='q'], [name='sort']"
+                    >
+                        <option value="1">Находки</option>
+                        <option value="0">Пропажи</option>
+                    </select>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="listings-grid" id="things-list">
+            {% include 'things/thing_list.html' %}
+        </div>
+    {% endblock %}
+    </main>
+{% block scripts %}
+    <script src="https://unpkg.com/htmx.org@2.0.6"></script>
+
+    <script>
+        // Находим наш контейнер с навигацией
+        const statusNav = document.getElementById('status-nav');
+
+        // Если контейнер найден на странице
+        if (statusNav) {
+            // Находим все ссылки внутри него
+            const navLinks = statusNav.querySelectorAll('a');
+
+            // Вешаем обработчик клика на сам контейнер (делегирование событий)
+            statusNav.addEventListener('click', function(event) {
+                // Убеждаемся, что кликнули именно по ссылке (тег A)
+                const clickedLink = event.target.closest('a');
+                if (!clickedLink) return;
+
+                // Убираем класс 'active' у всех ссылок
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Добавляем класс 'active' той ссылке, по которой кликнули
+                clickedLink.classList.add('active');
+            });
+        }
+    </script>
+{% endblock %}
+{% analytical_body_bottom %}
+</body>
+</html>

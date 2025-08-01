@@ -1,0 +1,5 @@
+<div class="info-banner"> <!-- Оранжевый баннер -->
+    <i class="fas fa-comment-dots"></i>
+    <p>Собираетесь опубликовать пост? Обязательно <a href="{% url 'users:edit_profile' %}">привяжите соцсети</a>, чтобы с вами могли связаться</p>
+    <button onclick="window.location.href = '{% url "users:edit_profile" %}'" class="settings-button">Настройки</button>
+</div>

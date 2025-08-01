@@ -1,0 +1,43 @@
+DEBUG: false
+
+# Hosts allowed to serve the site https://docs.djangoproject.com/en/5.2/ref/settings/#allowed-hosts
+ALLOWED_HOSTS:
+- 'things.ifknow.ru'
+- 'www.things.ifknow.ru'
+
+# A string with the database URL as defined in https://github.com/jazzband/dj-database-url#url-schema
+DATABASE_URL: postgresql://lost_found_admin:0000@db:5432/lost_and_found_db
+
+# Toggle deployment settings for local development or production
+DJANGO_ENV: production
+
+# A long random string you keep secret https://docs.djangoproject.com/en/5.2/ref/settings/#secret-key
+SECRET_KEY:
+  7awXB9oGUJ/Kp4MqAhn+TU/WG2iKJEYEWY9ncJnz0wdhETylIBjRpi2UVnanqLY4q87WA6quccGORhtx
+
+# Name of deployed environment (e.g. 'staging', 'production')
+ENVIRONMENT: production
+
+# The name of the S3 bucket
+B2_BUCKET_NAME: LostAndFound
+
+# The B2 application key
+B2_APPLICATION_KEY: K0053wxdcVsF1CTWcamCyBHiEqt572o
+
+# The B2 application key ID
+B2_KEY_ID: 005d41e6b4de28c0000000002
+
+# The B2 endpoint URL
+B2_ENDPOINT_URL: https://s3.us-east-005.backblazeb2.com
+
+# The GitHub OAuth application client secret
+SOCIAL_AUTH_GITHUB_SECRET: ba092faca55170aaf04a7e59f3bfae60385d70c0
+
+# The GitHub OAuth application client key
+SOCIAL_AUTH_GITHUB_KEY: Ov23liEygxCAsnfMCbua
+
+# The Yandex Metrica ID
+YANDEX_METRICA_COUNTER_ID: 103558755
+
+# The Google Analytics GTAG ID
+GOOGLE_ANALYTICS_GTAG_PROPERTY_ID: G-6S60NGBETG

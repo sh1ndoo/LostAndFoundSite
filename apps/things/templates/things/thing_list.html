@@ -1,0 +1,4 @@
+<input type="hidden" name="status" value="{{ status|default_if_none:'' }}">
+{% for thing in things %}
+    {% include 'things/card.html' %}
+{% endfor %}

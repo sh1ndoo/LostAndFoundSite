@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <title>Не найдено</title>
+    <link type="text/css" href="{% static 'things/css/detail-page.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="item-detail-container">
+
+    <!-- Левая колонка с изображением -->
+    <div class="item-image-panel">
+        <img src="https://cdn-icons-png.freepik.com/512/943/943692.png" alt="Страница">
+    </div>
+
+    <!-- Правая колонка с информацией -->
+    <div class="item-info-panel">
+
+        <!-- Заголовок -->
+        <h1>Страница сайта</h1>
+       <div class="detail-status status-lost">
+            <i class="fas fa-exclamation-circle"></i> Потеряно
+       </div>
+
+        <!-- Детальные блоки -->
+        <div class="info-block">
+            <h2>Описание</h2>
+            <p>Неизвестная страница на сайте</p>
+        </div>
+
+        <div class="info-block">
+            <h2>Место</h2>
+            <p>things.ifknow.ru</p>
+        </div>
+
+        <div class="info-block">
+            <h2>Дата потери</h2>
+            <p>Прямо сейчас</p>
+        </div>
+
+        <!-- Кнопка для связи -->
+        <div class="item-actions">
+            <a href="{% url 'things:index' %}" class="btn btn-primary">
+                <i class="fa-solid fa-house"></i> Вернуться на главную
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
