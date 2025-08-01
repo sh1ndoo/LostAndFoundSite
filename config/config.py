@@ -61,10 +61,6 @@ class Config(GoodConf):
         default="",
         description="GitHub OAuth2 Secret for social authentication",
     )
-    YANDEX_METRICA_COUNTER_ID: str = Field(
-        default="",
-        description="Yandex Metrica ID",
-    )
     GOOGLE_ANALYTICS_GTAG_PROPERTY_ID: str = Field(
         default="",
         description="Goggle Analytics GTAG ID",

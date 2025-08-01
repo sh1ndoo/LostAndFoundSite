@@ -8,6 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Бюро находок</title>
 
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=103558755', 'ym');
+
+        ym(103558755, 'init', {ssr:true, webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/103558755" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet">
 
@@ -21,7 +35,6 @@
     <link rel="icon" type="image/svg+xml" href="{% static 'favicons/favicon.svg' %}">
     <link rel="apple-touch-icon" sizes="192x192" href="{% static 'favicons/android-chrome-192x192.png' %}">
     <link rel="manifest" href="{% static 'favicons/site.webmanifest' %}">
-
     {% block head %}
     {% endblock %}
     {% analytical_head_bottom %}
